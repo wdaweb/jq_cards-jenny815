@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #game {
+      width: 400px;
+      position: relative;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .card {
+      width: 60px;
+      height: 60px;
+      position: relative;
+      float: left;
+      margin: 10px;
+      background-color: black;
+    }
+
+    #text-area {
+      width: 200px;
+      height: 200px;
+      background: blanchedalmond;
+      position: absolute;
+      top: 45%;
+      left: 45%;
+
+
+    }
+  </style>
+</head>
+
+<body>
+  <div id="game">
+
+  </div>
+  <div id="text-area">
+    <input type="button" value="開始" id="btn-start">
+    <br>
+    <p>分數: <span id="text-score">0</span></p>
+    <p>剩餘: <span id="text-time">0</span> 秒</p>
+  </div>
+  <script src="./jquery-3.6.0.min.js"></script>
+  <script>
+    let bbb = 190
+    // 分數
+    let score = 0
+    // 遊戲時間
+    let countdown = 0
+    // 倒數計時
+    let timer = 0
+    const gamestart = () => {
+      for (let i = 0; i < 25; i++) {
+        $('#game').append(`
+            <div class="card">
+            </div>
+        `)
+      }
+      bbb -= 10
+      let color1 = Math.floor(Math.random() * 253) + 1
+      let color2 = Math.floor(Math.random() * 253) + 1
+      let color3 = Math.floor(Math.random() * 253) + 1
+
+      for (let i = 0; i < 25; i++) {
+        let number = i
+        $('.card').eq(i).css('background-color', `rgb(${color1},${color2},${color3})`)
+        $('.card').eq(i).attr('data-card', number)
+
+      }
+      let target = Math.floor(Math.random() * 25)
+      $('.card').eq(target).css('filter', `hue-rotate(${bbb}deg)`)
+      $('.card').eq(target).attr('data-color', target)
+      $('.card').eq(target).addClass('aaa')
+    }
+    $('#btn-start').click(function () {
+      $(this).attr('disabled', true)
+
+      // 重設
+      score = 0
+      $('#text-score').text(score)
+      countdown = 30
+      $('#text-time').text(countdown)
+
+
+      gamestart()
+
+      timer = setInterval(() => {
+        countdown--
+        $('#text-time').text(countdown)
+
+
+      }, 1000);
+
+
+    })
+    這裡開始改
+    $('#game').on('click', '.aaa', function () {
+      $('.card').fadeTo(1000, 0, function () {
+        $('#game').empty()
+
+
+      })
+
+      setTimeout(gamestart, 1000)
+    })
+    gamestart()
+
+
+
+
+  </script>
+
+</body>
+
+</html>

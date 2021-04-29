@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #game {
+      width: 300px;
+    }
+
+    .card {
+      width: 20px;
+      height: 20px;
+      position: relative;
+      float: left;
+      margin: 5px;
+      background-color: black;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="game">
+
+  </div>
+  <div id="text-area">
+    <input type="button" value="開始" id="btn-start">
+    <br>
+    <p>分數: <span id="text-score">0</span></p>
+    <p>剩餘: <span id="text-time">0</span> 秒</p>
+  </div>
+  <script src="./jquery-3.6.0.min.js"></script>
+  <script>
+    //色塊顏色
+    let bbb = 190
+    // 分數
+    let score = 0
+    // 倒數計時
+    let countdown = 30
+    // 遊戲時間
+    let timer = 0
+
+    const gamestart = () => {
+      for (let i = 0; i < 100; i++) {
+        $('#game').append(`
+         <div class="card">
+          </div>
+        `)
+      }
+      //色塊每次減10度
+      bbb -= 10
+      // score = 0
+      // $('#text-score').text(score)
+      // countdown = 0
+      // $('#text-time').text(countdown)
+
+      let color1 = Math.floor(Math.random() * 253) + 1
+      let color2 = Math.floor(Math.random() * 253) + 1
+      let color3 = Math.floor(Math.random() * 253) + 1
+
+      for (let i = 0; i < 100; i++) {
+        let number = i
+        $('.card').eq(i).css('background-color', `rgb(${color1},${color2},${color3})`)
+        $('.card').eq(i).attr('data-card', number)
+      }
+      let target = Math.floor(Math.random() * 100)
+      $('.card').eq(target).css('filter', `hue-rotate(${bbb}deg)`)
+      $('.card').eq(target).attr('data-color', target)
+      $('.card').eq(target).addClass('aaa')
+    }
+
+    $('#btn-start').click(function () {
+      gamestart()
+      $(this).attr('disabled', true)
+      //重設
+      score = 0
+      $('#text-score').text(score)
+      countdown = 30
+      $('#text-time').text(countdown)
+
+      // gamestart()
+      // timer
+      timer = setInterval(() => {
+        countdown--
+        $('#text-time').text(countdown)
+        if (countdown <= 0) {
+          clearInterval(timer)
+          alert('遊戲結束')
+          $(this).attr('disabled', false)
+
+        }
+
+      }, 1000)
+    })
+
+    $('#game').on('click', '.aaa', function () {
+      $('.card').fadeTo(1000, 0, function () {
+        $('#game').empty()
+        gamestart()
+      })
+      score++
+      $('#text-score').text(score)
+      // setTimeout(gamestart, 1000)
+      console.log(bbb);
+    })
+
+
+
+  </script>
+
+</body>
+
+</html>

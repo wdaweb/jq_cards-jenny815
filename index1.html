@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    #game {
+        width: 400px;
+    }
+
+    .card {
+        width: 60px;
+        height: 60px;
+        position: relative;
+        float: left;
+        margin: 10px;
+        background-color: black;
+    }
+</style>
+
+<body>
+    <div id="game">
+    </div>
+    <script src="./jquery-3.6.0.min.js"></script>
+    <script>
+        for (let i = 0; i < 25; i++) {
+            $('#game').append(`
+            <div class="card">
+            </div>
+        `)
+        }
+
+        // 決定色塊並打散
+        let color1 = Math.floor(Math.random() * 253) + 1
+        let color2 = Math.floor(Math.random() * 253) + 1
+        let color3 = Math.floor(Math.random() * 253) + 1
+
+        let color4 = Math.floor(Math.random() * 253) + 1
+        let color5 = Math.floor(Math.random() * 253) + 1
+        let color6 = Math.floor(Math.random() * 253) + 1
+
+        // console.log(target);
+        for (let i = 0; i < 25; i++) {
+            let number = i
+            $('.card').eq(i).css('background-color', `rgb(${color1},${color2},${color3})`)
+            $('.card').eq(i).attr('data-card', number)
+
+        }
+        let target = Math.floor(Math.random() * 25)
+        $('.card').eq(target).css('background-color', `rgb(${color4},${color5},${color6})`)
+        $('.card').eq(target).attr('data-color', target)
+        $('.card').eq(target).addClass('aaa')
+
+        $('#game').on('click', '.aaa', function () {
+            $('#game').fadeTo(1000, 0).empty()
+
+        })
+
+
+
+    </script>
+</body>
+
+</html>
