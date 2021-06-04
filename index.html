@@ -5,108 +5,161 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
   <title>Document</title>
   <style>
-    #game {
-      width: 300px;
+    html,
+    body {
+      height: 100vh;
+      overflow: hidden;
+
     }
 
-    .card {
-      width: 20px;
-      height: 20px;
-      position: relative;
-      float: left;
-      margin: 5px;
-      background-color: black;
+    #container {
+      width: 50%;
+      height: 90%;
+      background: rgb(162, 208, 216);
+      margin: auto;
+      border-radius: 15px;
+      padding-top: 20px;
+    }
+
+    #game {
+      width: 450px;
+      height: 450px;
+      border: 1px solid black;
+      margin: auto;
+      border-radius: 5px;
+      padding: 10px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.75);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(19.5px);
+      -webkit-backdrop-filter: blur(19.5px);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 10px;
+      border: 5px solid rgba(26, 64, 233, 0.18);
+      cursor: pointer;
+
+    }
+
+    .cube {
+      width: 40px;
+      height: 40px;
+      margin: 0;
+      background: rgb(228, 188, 188);
+      border-radius: 10px;
+      display: inline-block;
+    }
+
+    #text-area {
+      width: 180px;
+      height: 180px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
+      padding-top: 5px;
+      color: white;
+    }
+
+    #p-style {
+      font-size: 3rem;
+      color: rgb(76, 31, 199);
+      margin-top: 150px;
+      font-family: 'Anton', sans-serif;
     }
   </style>
 </head>
 
 <body>
-  <div id="game">
+  <div id="container">
+    <div id="game">
+      <p id="p-style">Find the different colors!</p>
+    </div>
+    <div id="text-area">
+      <input type="button" value="START" id="btn-start"
+        style="background: rgb(243, 247, 246);border-radius: 5px;border:1px solid rgb(8, 8, 8)">
+      <p>SCORE: <span id="text-score">0</span></p>
+      <p>TIME:<span id="text-time">0</span></p>
+    </div>
+  </div>
 
-  </div>
-  <div id="text-area">
-    <input type="button" value="開始" id="btn-start">
-    <br>
-    <p>分數: <span id="text-score">0</span></p>
-    <p>剩餘: <span id="text-time">0</span> 秒</p>
-  </div>
   <script src="./jquery-3.6.0.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+
   <script>
-    //色塊顏色
-    let bbb = 190
-    // 分數
     let score = 0
-    // 倒數計時
+    let time = 0
     let countdown = 30
-    // 遊戲時間
-    let timer = 0
+    let a = 120
 
     const gamestart = () => {
       for (let i = 0; i < 100; i++) {
         $('#game').append(`
-         <div class="card">
+        <div class="cube">
           </div>
-        `)
+       `)
       }
-
-      let color1 = Math.floor(Math.random() * 253) + 1
-      let color2 = Math.floor(Math.random() * 253) + 1
-      let color3 = Math.floor(Math.random() * 253) + 1
+      // let a = 10
+      let R = Math.floor(Math.random() * 255)
+      let G = Math.floor(Math.random() * 255)
+      let B = Math.floor(Math.random() * 255)
 
       for (let i = 0; i < 100; i++) {
         let number = i
-        $('.card').eq(i).css('background-color', `rgb(${color1},${color2},${color3})`)
-        $('.card').eq(i).attr('data-card', number)
+        $('.cube').eq(i).css('background-color', `rgb(${R},${G},${B})`)
+        $('.cube').eq(i).attr('data-card', number)
       }
+
       let target = Math.floor(Math.random() * 100)
-      $('.card').eq(target).css('filter', `hue-rotate(${bbb}deg)`)
-      $('.card').eq(target).attr('data-color', target)
-      $('.card').eq(target).addClass('aaa')
+      $('.cube').eq(target).css('background-color', `rgb(${R - a},${G - a},${B - a}`)
+      $('.cube').eq(target).attr('data-color', target)
+      $('.cube').eq(target).addClass('aaa')
+
     }
 
+
+
     $('#btn-start').click(function () {
-      bbb = 190
+      a = 120
       $('#game').empty()
-      gamestart()
       $(this).attr('disabled', true)
-      //重設
+      gamestart()
+
       score = 0
       $('#text-score').text(score)
       countdown = 30
       $('#text-time').text(countdown)
 
-      // gamestart()
-      // timer
-      timer = setInterval(() => {
+      time = setInterval(() => {
         countdown--
         $('#text-time').text(countdown)
         if (countdown <= 0) {
-          clearInterval(timer)
+          clearInterval(time)
           Swal.fire({
             icon: 'info',
             title: '時間到',
             text: `你得到 ${score} 分`
           })
           $(this).attr('disabled', false)
-
         }
 
       }, 1000)
     })
 
     $('#game').on('click', '.aaa', function () {
-      $('.card').fadeTo(300, 0, function () {
+      $('.cube').fadeTo(300, 0, function () {
         $('#game').empty()
         gamestart()
       })
-      bbb -= 10
+      a -= 8
       score++
       $('#text-score').text(score)
-      // setTimeout(gamestart, 1000)
-      console.log(bbb);
     })
 
 
